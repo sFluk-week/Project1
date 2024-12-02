@@ -10,42 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
  
-model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  name     String
-  password String
-  posts    Post[]
-}
-
-model Post {
-  id        Int      @id @default(autoincrement())
-  subject   String
-  detail    String
-  imgurl    String
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  like      Int      @default(0)
+model Player {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("USER") // เปลี่ยน enum Role เป็น String
+  games     Game[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model User_ID {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  name     String
-  password String
-  game     Game[]
 }
 
 model Game {
-  id        Int      @id @default(autoincrement())
-  name_game String
-  detail    String
-  imgurl    String
-  userId    Int
-  user      User_ID  @relation(fields: [userId], references: [id])
-  like      Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  published   Boolean  @default(false)
+  playerId    String
+  player      Player   @relation(fields: [playerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
+
